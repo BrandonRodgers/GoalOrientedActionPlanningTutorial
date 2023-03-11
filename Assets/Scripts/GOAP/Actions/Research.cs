@@ -8,7 +8,7 @@ namespace GOAP.Actions
         public override bool PrePerform()
         {
             bool success = false;
-            target = GWorld.Instance.RemoveOffice();
+            target = GWorld.Instance.GetQueue("offices").RemoveResource();
 
             if (target != null)
             {
@@ -22,7 +22,7 @@ namespace GOAP.Actions
 
         public override bool PostPerform()
         {
-            GWorld.Instance.AddOffice(target);
+            GWorld.Instance.GetQueue("offices").AddResource(target);
             inventory.RemoveItem(target);
             GWorld.Instance.GetWorld().ModifyState("FreeOffice", 1);
             return true;

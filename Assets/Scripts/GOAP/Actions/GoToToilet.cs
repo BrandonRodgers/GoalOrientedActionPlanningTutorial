@@ -8,7 +8,7 @@ namespace GOAP.Actions
         public override bool PrePerform()
         {
             bool success = false;
-            target = GWorld.Instance.RemoveToilet();
+            target = GWorld.Instance.GetQueue("toilets").RemoveResource();
 
             if (target != null)
             {
@@ -22,7 +22,7 @@ namespace GOAP.Actions
 
         public override bool PostPerform()
         {
-            GWorld.Instance.AddToilet(target);
+            GWorld.Instance.GetQueue("toilets").AddResource(target);
             inventory.RemoveItem(target);
             GWorld.Instance.GetWorld().ModifyState("FreeToilet", 1);
             beliefs.RemoveState("needRelief");

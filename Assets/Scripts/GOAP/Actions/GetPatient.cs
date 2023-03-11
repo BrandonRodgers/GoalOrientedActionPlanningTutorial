@@ -10,22 +10,21 @@ namespace GOAP.Actions
         public override bool PrePerform()
         {
             bool success = false;
-            target = GWorld.Instance.RemovePatient();
+            target = GWorld.Instance.GetQueue("patients").RemoveResource();
             
             if (target != null)
             {
-                resource = GWorld.Instance.RemoveCubicle();
+                resource = GWorld.Instance.GetQueue("cubicles").RemoveResource();
                 
                 if (resource != null)
                 {
                     inventory.AddItem(resource);
-                    Debug.Log($"GetPatient::PrePerform agent name: {this.gameObject.name}");
                     GWorld.Instance.GetWorld().ModifyState("FreeCubicle", -1);
                     success = true;
                 }
                 else
                 {
-                    GWorld.Instance.AddPatient(target);
+                    GWorld.Instance.GetQueue("patients").AddResource(target);
                     target = null;
                 }
             }

@@ -20,7 +20,7 @@ namespace GOAP.Actions
         public override bool PostPerform()
         {
             GWorld.Instance.GetWorld().ModifyState("TreatingPatient", 1);
-            GWorld.Instance.AddCubicle(target);
+            GWorld.Instance.GetQueue("cubicles").AddResource(target);
             inventory.RemoveItem(target);
             GWorld.Instance.GetWorld().ModifyState("FreeCubicle", 1);
             return true;
