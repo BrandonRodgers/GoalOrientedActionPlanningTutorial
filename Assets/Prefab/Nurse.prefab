@@ -1045,7 +1045,11 @@ GameObject:
   - component: {fileID: 177407082141715887}
   - component: {fileID: 48590394365679395}
   - component: {fileID: 5018206043705848256}
+  - component: {fileID: 3752290932713995583}
   - component: {fileID: 7208512949242086544}
+  - component: {fileID: 3974007319184425325}
+  - component: {fileID: 4084969282193436925}
+  - component: {fileID: 1099881017241624967}
   m_Layer: 0
   m_Name: Nurse
   m_TagString: Untagged
@@ -1079,9 +1083,9 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 5
   m_Acceleration: 8
-  avoidancePriority: 50
+  avoidancePriority: 2
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
@@ -1105,6 +1109,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actions: []
   currentAction: {fileID: 0}
+  minWaitTired: 30
+  maxWaitTired: 40
+  minWaitRelief: 30
+  maxWaitRelief: 40
+--- !u!114 &3752290932713995583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2618188073631541129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f3def950bfff4b41a3e666fc43dd0d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thisAgent: {fileID: 5018206043705848256}
 --- !u!114 &7208512949242086544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1123,10 +1144,89 @@ MonoBehaviour:
   targetTag: 
   duration: 0
   preConditions:
-  - key: 
+  - key: Waiting
+    value: 1
+  - key: FreeCubicle
+    value: 1
+  afterEffects:
+  - key: patientPickedUp
+    value: 1
+  agent: {fileID: 0}
+  running: 0
+--- !u!114 &3974007319184425325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2618188073631541129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d50b046e50100848b6b99fe313a9e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionName: GoToCubicle
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 2
+  preConditions:
+  - key: patientPickedUp
     value: 0
   afterEffects:
   - key: treatPatient
+    value: 0
+  agent: {fileID: 0}
+  running: 0
+--- !u!114 &4084969282193436925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2618188073631541129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c402b8bcc20c504cbe3127507144723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionName: Rest
+  cost: 1
+  target: {fileID: 0}
+  targetTag: Lounge
+  duration: 5
+  preConditions:
+  - key: exhausted
+    value: 0
+  afterEffects:
+  - key: rested
+    value: 0
+  agent: {fileID: 0}
+  running: 0
+--- !u!114 &1099881017241624967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2618188073631541129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f06d378b978c8f6468e40220066497d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionName: GoToToilet
+  cost: 1
+  target: {fileID: 0}
+  targetTag: Toilet
+  duration: 5
+  preConditions:
+  - key: FreeToilet
+    value: 1
+  - key: needRelief
+    value: 1
+  afterEffects:
+  - key: relief
     value: 1
   agent: {fileID: 0}
   running: 0

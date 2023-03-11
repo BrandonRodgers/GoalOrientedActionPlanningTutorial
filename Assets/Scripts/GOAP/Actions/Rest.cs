@@ -1,8 +1,9 @@
 using GOAP.Base;
+using UnityEngine;
 
 namespace GOAP.Actions
 {
-    public class Register : GAction
+    public class Rest : GAction
     {
         public override bool PrePerform()
         {
@@ -11,7 +12,7 @@ namespace GOAP.Actions
     
         public override bool PostPerform()
         {
-            beliefs.ModifyState("atHospital", 0);
+            beliefs.RemoveState("exhausted");
             return true;
         }
     }

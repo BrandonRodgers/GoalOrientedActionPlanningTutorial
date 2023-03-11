@@ -2726,6 +2726,9 @@ GameObject:
   - component: {fileID: 4497746669203056480}
   - component: {fileID: 7758534784922537786}
   - component: {fileID: 2035306423645425177}
+  - component: {fileID: 6294614286920779450}
+  - component: {fileID: 3701475297374025134}
+  - component: {fileID: 7393271047700020030}
   m_Layer: 0
   m_Name: Patient
   m_TagString: Untagged
@@ -2759,9 +2762,9 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 5
   m_Acceleration: 8
-  avoidancePriority: 50
+  avoidancePriority: 3
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
@@ -2785,6 +2788,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actions: []
   currentAction: {fileID: 0}
+  minWaitRelief: 1
+  maxWaitRelief: 5
 --- !u!114 &171001759314351647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2794,7 +2799,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7881807149238628900}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 021f353967ab39d428ab73528a469889, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f3def950bfff4b41a3e666fc43dd0d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   thisAgent: {fileID: 7230788734250479708}
@@ -2814,7 +2819,7 @@ MonoBehaviour:
   cost: 1
   target: {fileID: 0}
   targetTag: Door
-  duration: 2
+  duration: 0
   preConditions: []
   afterEffects:
   - key: hasArrived
@@ -2837,7 +2842,7 @@ MonoBehaviour:
   cost: 1
   target: {fileID: 0}
   targetTag: Reception
-  duration: 5
+  duration: 1
   preConditions:
   - key: hasArrived
     value: 1
@@ -2868,6 +2873,85 @@ MonoBehaviour:
     value: 1
   afterEffects:
   - key: isWaiting
+    value: 1
+  agent: {fileID: 0}
+  running: 0
+--- !u!114 &6294614286920779450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7881807149238628900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 725c51fd01d70bd47b5b36c5fb178524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionName: GetTreated
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 5
+  preConditions:
+  - key: atHospital
+    value: 1
+  afterEffects:
+  - key: isTreated
+    value: 1
+  agent: {fileID: 0}
+  running: 0
+--- !u!114 &3701475297374025134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7881807149238628900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ecaa99e0abcc1a489324e4067681484, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionName: GoHome
+  cost: 1
+  target: {fileID: 0}
+  targetTag: Home
+  duration: 0
+  preConditions:
+  - key: isCured
+    value: 1
+  afterEffects:
+  - key: isHome
+    value: 1
+  agent: {fileID: 0}
+  running: 0
+--- !u!114 &7393271047700020030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7881807149238628900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f06d378b978c8f6468e40220066497d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionName: GoToToilet
+  cost: 1
+  target: {fileID: 0}
+  targetTag: Toilet
+  duration: 5
+  preConditions:
+  - key: FreeToilet
+    value: 1
+  - key: atHospital
+    value: 1
+  - key: needRelief
+    value: 1
+  afterEffects:
+  - key: relief
     value: 1
   agent: {fileID: 0}
   running: 0

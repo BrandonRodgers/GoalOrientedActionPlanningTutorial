@@ -21,6 +21,9 @@ namespace GOAP.Base
 
         public WorldStates agentBeliefs;
 
+        public GInventory inventory;
+        public WorldStates beliefs;
+
         public bool running = false;
 
         public GAction()
@@ -34,17 +37,24 @@ namespace GOAP.Base
             agent = this.gameObject.GetComponent<NavMeshAgent>();
 
             if (preConditions != null)
+            {
                 foreach (WorldState w in preConditions)
                 {
                     preconditions.Add(w.key, w.value);
                 }
+            }
+
 
             if (afterEffects != null)
+            {
                 foreach (WorldState w in afterEffects)
                 {
                     effects.Add(w.key, w.value);
                 }
-            
+            }
+
+            inventory = this.GetComponent<GAgent>().inventory;
+            beliefs = this.GetComponent<GAgent>().beliefs;
         }
 
         public bool IsAchievable()

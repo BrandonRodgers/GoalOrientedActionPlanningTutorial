@@ -21,11 +21,15 @@ namespace GOAP.Base
     {
         public List<GAction> actions = new List<GAction>();
         public Dictionary<SubGoal, int> goals = new Dictionary<SubGoal, int>();
+        public GInventory inventory = new GInventory();
+        public WorldStates beliefs = new WorldStates();
 
         GPlanner planner;
         private Queue<GAction> actionQueue;
         public GAction currentAction;
         private SubGoal currentGoal;
+
+        private Vector3 destination = Vector3.zero;
 
         private bool invoked = false;
     
@@ -51,7 +55,10 @@ namespace GOAP.Base
         {
             if (currentAction != null && currentAction.running)
             {
-                if ( currentAction.agent.hasPath && (currentAction.agent.remainingDistance < 1f) )
+                float distanceToTarget =
+                    Vector3.Distance(destination, this.transform.position);
+
+                if (distanceToTarget < 2f) // currentAction.agent.remainingDistance < 1f
                 {
                     if (!invoked)
                     {
@@ -71,7 +78,7 @@ namespace GOAP.Base
 
                 foreach (KeyValuePair<SubGoal, int> sg in sortedGoals)
                 {
-                    actionQueue = planner.plan(actions, sg.Key.subGoals, null);
+                    actionQueue = planner.plan(actions, sg.Key.subGoals, beliefs);
 
                     if (actionQueue != null)
                     {
@@ -106,7 +113,16 @@ namespace GOAP.Base
                     if (currentAction.target != null)
                     {
                         currentAction.running = true;
-                        currentAction.agent.SetDestination(currentAction.target.transform.position);
+
+                        destination = currentAction.target.transform.position;
+                        Transform dest = currentAction.target.transform.Find("Destination");
+
+                        if (dest != null)
+                        {
+                            destination = dest.position;
+                        }
+                        
+                        currentAction.agent.SetDestination(destination);
                     }
                 }
                 else

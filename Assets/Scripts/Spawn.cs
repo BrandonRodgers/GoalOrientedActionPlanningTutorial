@@ -1,14 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Serialization;
 
 public class Spawn : MonoBehaviour
 {
     [SerializeField] private GameObject patientPrefab;
 
-    [FormerlySerializedAs("numPatients")] [SerializeField] private int initialNumPatients;
-    
+    [SerializeField] private int initialNumPatients;
+
+    [SerializeField] private bool keepSpawning = false;
+
+    private int patientNum = 3;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,13 +20,18 @@ public class Spawn : MonoBehaviour
         {
             Instantiate(patientPrefab, this.transform.position, Quaternion.identity);
         }
-        
-        Invoke("SpawnPaitent", 5);
+
+        if (keepSpawning)
+        {
+            Invoke("SpawnPatient", 5);    
+        }
     }
     
     private void SpawnPatient()
     {
-        Instantiate(patientPrefab, this.transform.position, Quaternion.identity);
+        GameObject newPatient = Instantiate(patientPrefab, this.transform.position, Quaternion.identity);
+        newPatient.GetComponent<NavMeshAgent>().avoidancePriority = patientNum;
+        patientNum++;
         Invoke("SpawnPatient", Random.Range(2, 10));
     }
 

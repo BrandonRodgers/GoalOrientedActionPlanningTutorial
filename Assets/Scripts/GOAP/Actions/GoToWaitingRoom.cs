@@ -1,4 +1,5 @@
 using GOAP.Base;
+using Unity.VisualScripting;
 
 namespace GOAP.Actions
 {
@@ -11,6 +12,9 @@ namespace GOAP.Actions
     
         public override bool PostPerform()
         {
+            GWorld.Instance.GetWorld().ModifyState("Waiting", 1);
+            GWorld.Instance.GetQueue("patients").AddResource(this.gameObject);
+            //beliefs.ModifyState("atHospital", 1);
             return true;
         }
     }
