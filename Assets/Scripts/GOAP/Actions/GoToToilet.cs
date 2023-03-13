@@ -25,7 +25,7 @@ namespace GOAP.Actions
             GWorld.Instance.GetQueue("toilets").AddResource(target);
             inventory.RemoveItem(target);
             GWorld.Instance.GetWorld().ModifyState("FreeToilet", 1);
-            beliefs.RemoveState("needRelief");
+            agentBeliefs.RemoveState("needRelief");
             return true;
         }
     }

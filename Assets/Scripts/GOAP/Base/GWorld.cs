@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TMPro;
+using System.Linq;
 using UnityEngine;
 
 namespace GOAP.Base
@@ -42,6 +42,11 @@ namespace GOAP.Base
             
             return que.Dequeue();
         }
+        
+        public void RemoveResource(GameObject r)
+        {
+            que = new Queue<GameObject>(que.Where(p => p != r));
+        }
     }
     
     public sealed class GWorld
@@ -52,6 +57,7 @@ namespace GOAP.Base
         private static ResourceQueue cubicles;
         private static ResourceQueue offices;
         private static ResourceQueue toilets;
+        private static ResourceQueue puddles;
 
         private static Dictionary<string, ResourceQueue> resources = new Dictionary<string, ResourceQueue>();
 
@@ -62,12 +68,14 @@ namespace GOAP.Base
             cubicles = new ResourceQueue("Cubicle", "FreeCubicle", world);
             offices = new ResourceQueue("Office", "FreeOffice", world);
             toilets = new ResourceQueue("Toilet", "FreeToilet", world);
+            puddles = new ResourceQueue("Puddle", "FreePuddle", world);
             
             // Add ResourceQueues to dictionary
             resources.Add("patients", patients);
             resources.Add("cubicles", cubicles);
             resources.Add("offices", offices);
             resources.Add("toilets", toilets);
+            resources.Add("puddles", puddles);
 
             Time.timeScale = 5f;
         }

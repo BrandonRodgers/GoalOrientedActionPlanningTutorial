@@ -12,7 +12,7 @@ namespace GOAP.Actions
     
         public override bool PostPerform()
         {
-            beliefs.RemoveState("exhausted");
+            agentBeliefs.RemoveState("exhausted");
             return true;
         }
     }

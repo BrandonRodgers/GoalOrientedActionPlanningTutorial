@@ -15,6 +15,7 @@ public class GInventory
     {
         foreach (GameObject item in items)
         {
+            if (item == null) break;
             if (item.CompareTag(tag))
             {
                 return item;

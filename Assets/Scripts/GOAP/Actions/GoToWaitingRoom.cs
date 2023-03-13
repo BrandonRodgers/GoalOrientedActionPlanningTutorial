@@ -14,7 +14,7 @@ namespace GOAP.Actions
         {
             GWorld.Instance.GetWorld().ModifyState("Waiting", 1);
             GWorld.Instance.GetQueue("patients").AddResource(this.gameObject);
-            //beliefs.ModifyState("atHospital", 1);
+            //agentBeliefs.ModifyState("atHospital", 1);
             return true;
         }
     }

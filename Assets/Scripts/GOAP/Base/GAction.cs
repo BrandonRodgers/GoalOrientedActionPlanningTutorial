@@ -19,10 +19,8 @@ namespace GOAP.Base
         public Dictionary<string, int> preconditions;
         public Dictionary<string, int> effects;
 
-        public WorldStates agentBeliefs;
-
         public GInventory inventory;
-        public WorldStates beliefs;
+        public WorldStates agentBeliefs;
 
         public bool running = false;
 
@@ -54,7 +52,7 @@ namespace GOAP.Base
             }
 
             inventory = this.GetComponent<GAgent>().inventory;
-            beliefs = this.GetComponent<GAgent>().beliefs;
+            agentBeliefs = this.GetComponent<GAgent>().beliefs;
         }
 
         public bool IsAchievable()

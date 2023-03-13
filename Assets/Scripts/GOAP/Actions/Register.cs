@@ -11,7 +11,7 @@ namespace GOAP.Actions
     
         public override bool PostPerform()
         {
-            beliefs.ModifyState("atHospital", 0);
+            agentBeliefs.ModifyState("atHospital", 0);
             return true;
         }
     }
