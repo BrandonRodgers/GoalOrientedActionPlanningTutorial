@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using GOAP.Base;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 public class WInterface : MonoBehaviour
 {
     private GameObject focusObject;
-    public GameObject newResourcePrefab;
+    private ResourceData focalObjectData;
+    private GameObject newResourcePrefab;
+    public GameObject[] allResources;
     public GameObject resources;
     private Vector3 goalPos;
     public NavMeshSurface surface;
@@ -34,40 +38,48 @@ public class WInterface : MonoBehaviour
             RaycastHit hit;
             if (_camera != null)
             {
+                if (EventSystem.current.IsPointerOverGameObject()) return;
+                
                 Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out hit))
                     return;
 
                 offsetCalc = false;
                 clickOffset = Vector3.zero;
+
+                Resource r = hit.transform.gameObject.GetComponent<Resource>();
                 
-                if (hit.transform.gameObject.CompareTag("Toilet"))
+                if (r != null)
                 {
                     focusObject = hit.transform.gameObject;
+                    focalObjectData = r.info;
                 }
-                else
+                else if (newResourcePrefab != null)
                 {
                     goalPos = hit.point;
-
                     focusObject = Instantiate(newResourcePrefab, goalPos, newResourcePrefab.transform.rotation);
+                    focalObjectData = focusObject.GetComponent<Resource>().info;
                 }
 
-                focusObject.GetComponent<Collider>().enabled = false;
+                if (focusObject != null)
+                {
+                    focusObject.GetComponent<Collider>().enabled = false;    
+                }
             }
         }
         else if (focusObject && Input.GetMouseButtonUp(0))
         {
             if (shouldDeleteResource)
             {
-                GWorld.Instance.GetQueue("toilets").RemoveResource(focusObject);
-                GWorld.Instance.GetWorld().ModifyState("FreeToilet", -1);
+                GWorld.Instance.GetQueue(focalObjectData.resourceQueue).RemoveResource(focusObject);
+                GWorld.Instance.GetWorld().ModifyState(focalObjectData.resourceState, -1);
                 Destroy(focusObject);
             }
             else
             {
                 focusObject.transform.parent = resources.transform;
-                GWorld.Instance.GetQueue("toilets").AddResource(focusObject);
-                GWorld.Instance.GetWorld().ModifyState("FreeToilet", 1);
+                GWorld.Instance.GetQueue(focalObjectData.resourceQueue).AddResource(focusObject);
+                GWorld.Instance.GetWorld().ModifyState(focalObjectData.resourceState, 1);
                 focusObject.GetComponent<Collider>().enabled = true;
                 
             }
@@ -81,9 +93,10 @@ public class WInterface : MonoBehaviour
             if (_camera != null)
             {
                 RaycastHit hitMove;
-                
+                int layerMask = LayerMask.GetMask("Floor");
+
                 Ray rayMove = _camera.ScreenPointToRay(Input.mousePosition);
-                if (!Physics.Raycast(rayMove, out hitMove))
+                if (!Physics.Raycast(rayMove, out hitMove, Mathf.Infinity, layerMask))
                     return;
 
                 if (!offsetCalc)
@@ -118,5 +131,15 @@ public class WInterface : MonoBehaviour
     public void MouseOutHoverTrash()
     {
         shouldDeleteResource = false;
+    }
+
+    public void ActivateToilet()
+    {
+        newResourcePrefab = allResources[0];
+    }
+    
+    public void ActivateCubicle()
+    {
+        newResourcePrefab = allResources[1];
     }
 }
